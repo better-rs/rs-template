@@ -29,11 +29,7 @@
 # go mod
 vendor/
 
-bin/
 tmp/
-*.log
-*.pb.go
-*.pb.micro.go
 .env*
 
 # artifacts from pprof tooling

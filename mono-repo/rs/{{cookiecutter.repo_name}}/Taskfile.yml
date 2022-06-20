@@ -1,0 +1,147 @@
+version: "3"
+
+#
+# sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
+#
+includes:
+  scripts:
+    taskfile: ./crates/rs-scripts/Taskfile.yml
+    dir: ./crates/rs-scripts/
+
+  cms:
+    taskfile: ./crates/rs-cms/Taskfile.yml
+    dir: ./crates/rs-cms/
+
+  ffi:core:
+    taskfile: ./crates/rs-ffi-core/Taskfile.yml
+    dir: ./crates/rs-ffi-core/
+
+
+#
+# global vars: https://taskfile.dev/#/usage?id=variables
+#
+vars:
+  VAR1: "some-var"
+
+# global env:
+env:
+  ENV1: testing
+  WORKSPACE: "crates/"
+
+# env file:
+dotenv:
+  - .env
+
+################################################################################################
+
+tasks:
+  default:
+    cmds:
+      - task: init
+      - task: run
+
+  init:
+    cmds:
+      - task: init:env
+      - task: install
+      - task: init:git:hook
+
+  init:env:
+    cmds:
+      - cp .env.local .env
+
+  init:git:hook:
+    cmds:
+      - pre-commit install
+
+  dev:
+    cmds:
+      - rustup toolchain install nightly
+      - rustup toolchain list
+
+  install:pre:
+    cmds:
+      - brew install go-task/tap/go-task
+      - brew install pre-commit
+      - pre-commit --version
+      - task --version
+
+  install:
+    cmds:
+      - cargo update
+
+  ################################################################################
+
+
+  new:
+    cmds:
+      - cd ${WORKSPACE}; cargo new --lib rust-by-example
+      - cd ${WORKSPACE}; cargo new --lib ${NEW_PROJECT_NAME}
+
+  new:bin:
+    cmds:
+      - cd ${WORKSPACE}; cargo new ${NEW_PROJECT_NAME}
+
+  new:lib:
+    cmds:
+      - cd ${WORKSPACE}; cargo new --lib ${NEW_PROJECT_NAME}
+
+  ################################################################################
+
+  release:
+    cmds:
+      - task: scripts:release
+      - open ./target/release
+
+  install:this:
+    cmds:
+      - task: scripts:install
+      - open ./target/release
+
+  run:
+    cmds:
+      - cargo run
+
+  run:scripts:
+    cmds:
+      - task: scripts:run:scripts
+
+  run:eth:scanner:
+    cmds:
+      - task: scripts:run:eth:scanner
+
+  run:discord:
+    cmds:
+      - task: scripts:run:discord
+
+  run:scripts:help:
+    cmds:
+      - cargo run --bin rs-scripts -- -h
+
+  ################################################################################
+
+  # search lib:
+  search:
+    cmds:
+      - cargo search
+
+
+  ###########################################################################
+
+  quick:
+    cmds:
+      - task: commit
+      - task: commit
+      - task: push
+    ignore_error: true
+
+  commit:
+    cmds:
+      - git add .
+      - git commit -m "update"
+    ignore_error: true
+
+  push:
+    cmds:
+      - git push origin main --tags
+      - repo_url=`git remote -v | grep push | awk -F ":" '{print $2}' | awk -F ".git" '{print "https://github.com/"$1}'`; open $repo_url
