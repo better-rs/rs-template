@@ -6,7 +6,7 @@ tasks:
 
   run:
     cmds:
-      - cargo run --bin rs-cli -- -n "Henry"
+      - cargo run
 
   test:
     cmds:
