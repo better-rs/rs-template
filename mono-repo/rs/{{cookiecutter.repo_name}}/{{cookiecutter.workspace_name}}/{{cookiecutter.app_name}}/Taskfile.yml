@@ -1,0 +1,29 @@
+version: "3"
+
+tasks:
+  init:
+    - echo "init"
+
+  run:
+    cmds:
+      - cargo run --bin rs-cli -- -n "Henry"
+
+  test:
+    cmds:
+      - cargo test
+
+  release:
+    cmds:
+      - cargo build --release
+      - cd ../..; open target/release/
+
+  install:
+    cmds:
+      - echo "install the local build binary to ~/.cargo/bin."
+      - cargo install --path . --force --verbose
+      - cargo install --list
+      - cd ../..; open target/release/
+
+  clean:
+    cmds:
+      - cargo clean

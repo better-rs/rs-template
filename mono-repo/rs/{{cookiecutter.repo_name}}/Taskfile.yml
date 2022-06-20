@@ -4,17 +4,17 @@ version: "3"
 # sub namespace: https://taskfile.dev/#/usage?id=including-other-taskfiles
 #
 includes:
-  scripts:
-    taskfile: ./crates/rs-scripts/Taskfile.yml
-    dir: ./crates/rs-scripts/
+  cli:
+    taskfile: ./{{cookiecutter.workspace_name}}/cli/Taskfile.yml
+    dir: ./{{cookiecutter.workspace_name}}/cli/
 
-  cms:
-    taskfile: ./crates/rs-cms/Taskfile.yml
-    dir: ./crates/rs-cms/
+  core:
+    taskfile: ./{{cookiecutter.workspace_name}}/core/Taskfile.yml
+    dir: ./{{cookiecutter.workspace_name}}/core/
 
-  ffi:core:
-    taskfile: ./crates/rs-ffi-core/Taskfile.yml
-    dir: ./crates/rs-ffi-core/
+  {{cookiecutter.app_name}}:
+    taskfile: ./{{cookiecutter.workspace_name}}/{{cookiecutter.app_name}}/Taskfile.yml
+    dir: ./{{cookiecutter.workspace_name}}/{{cookiecutter.app_name}}/
 
 
 #
@@ -100,23 +100,11 @@ tasks:
 
   run:
     cmds:
-      - cargo run
+      - task: run:cli
 
-  run:scripts:
+  run:cli:
     cmds:
-      - task: scripts:run:scripts
-
-  run:eth:scanner:
-    cmds:
-      - task: scripts:run:eth:scanner
-
-  run:discord:
-    cmds:
-      - task: scripts:run:discord
-
-  run:scripts:help:
-    cmds:
-      - cargo run --bin rs-scripts -- -h
+      - task: cli:run:scripts
 
   ################################################################################
 
