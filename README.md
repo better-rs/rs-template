@@ -37,11 +37,11 @@ brew install go-task/tap/go-task
 
 ```yml
 
-# cd your-workspace/
-# rust monorepo:  git@github.com:better-rs/rs-template.git
-new:mono:
-    cmds:
-        - cookiecutter https://github.com/better-rs/rs-template.git --directory="mono-repo/rs"
+# cd:
+cd your-workspace/
+
+# create rust monorepo(git repo):
+cookiecutter https://github.com/better-rs/rs-template.git --directory="mono-repo/rs"
 
 ```
 
